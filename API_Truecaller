@@ -1,0 +1,40 @@
+<?php
+
+
+class API_Truecaller{
+	
+	const BASE_URL = 'www.truecaller.com';
+	
+    static function genrateURL($countryISO = 'IN',$phoneNumber= ''){
+		
+		if(empty($countryISO) || strlen($countryISO) != 2 ) return false;
+		
+        return  sprintf("http://%s/%s/%s",self::BASE_URL,trim(strtolower($countryISO)),$phoneNumber);
+		       		
+    }
+
+   static function sendRequest($countryISO = 'in',$phoneNumber= '') {
+
+        $requestURL = self::genrateURL($countryISO,$phoneNumber);
+		
+        $curl = curl_init();
+		
+        $setUserAgent = 'Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36';
+		
+        $setCookie = 'cookie';
+
+        curl_setopt($curl,CURLOPT_URL, $requestURL);
+		
+        curl_setopt($curl,CURLOPT_USERAGENT,$setUserAgent);
+		
+        curl_setopt($curl,CURLOPT_COOKIE,$setCookie);
+
+        $result = curl_exec($curl) or die(curl_error($curl));
+		
+        curl_close($curl);
+
+        return $result;
+		
+    }
+
+}
